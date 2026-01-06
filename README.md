@@ -45,8 +45,6 @@ This project **will not work** unless your setup matches the following *exactly*
 - **125% Windows scaling**
 - **60Hz refresh rate**
 
----
-
 ### Emulator
 - **melonDS**
 - **Windowed Fullscreen mode**
@@ -54,8 +52,6 @@ This project **will not work** unless your setup matches the following *exactly*
 ### Game
 - **Starfy 4 ROM**
   - You must supply this yourself
-
----
 
 ### Media Player
 - **VLC Media Player**
