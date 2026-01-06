@@ -55,7 +55,7 @@ This project **will not work** unless your setup matches the following *exactly*
 
 ### Media Player
 - **VLC Media Player**
-  - Yes, really
+  - Yes, really, the opening CG is just an overlayed translated video
 
 ---
 
@@ -95,3 +95,12 @@ If it doesn’t:
 - Good luck.
 
 :)
+
+---
+
+## Credits / Acknowledgements
+
+This project would not exist without **SomeUselessTranslation** on YouTube.
+
+Her full translation of Starfy 4 was used extensively during the creation of this tool.
+The opening CG fully belongs to them.
