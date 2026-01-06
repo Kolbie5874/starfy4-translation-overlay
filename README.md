@@ -102,5 +102,5 @@ If it doesn’t:
 
 This project would not exist without **SomeUselessTranslation** on YouTube.
 
-Her full translation of Starfy 4 was used extensively during the creation of this tool.
+Their full translation of Starfy 4 was used extensively during the creation of this tool.
 The opening CG fully belongs to them.
