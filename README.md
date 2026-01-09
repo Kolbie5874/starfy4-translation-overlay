@@ -76,7 +76,7 @@ This project will not work unless your setup matches the following **exactly**.
 - **Windows Defender may flag this as evasive malware** due to the way the program is coded to hide windows from screenshots. This is a false positive. You may need to whitelist the tool or disable the check to run it.
 
 ### Performance
-- On my machine with an i7-9700, I could comfortably run the tool at 1ms with it only using 10-15% CPU, on a laptop with an i5-1135G7, it could handle 10ms with the same CPU overhead of 10-15%. The tool is configured out the gate to run at 10ms.
+- On my machine with an i7-9700, I could comfortably run the tool at 1ms with it only using 10-15% CPU, on a laptop with an i5-1135G7, it could handle 10ms with the same CPU overhead of 10-15%. The tool is configured out the gate to run at 10ms. You can adjust this to match performance.
 
 ---
 
