@@ -1,106 +1,125 @@
-# Starfy 4 Translation Overlay Tool  
+# Starfy 4 Translation Overlay Tool
 
 ## What Is This?
 
 This project is a translation overlay tool for Starfy 4 that works by:
 
-- Taking live screenshots of the game at an adjustable millisecond rate 
-- Hashing very specific regions of those screenshots  
-- Matching them against a database of known text images  
-- Overlaying translated text on top of the game  
-- Pretending this is a normal and sustainable approach  
+- Taking live screenshots of the game at an adjustable millisecond rate
+- Hashing very specific regions of those screenshots
+- Matching them against a database of known text images
+- Overlaying translated text on top of the game
+- Pretending this is a normal and sustainable approach
 
 Think of it more like a puppet show performed in front of an emulator.
 
-This does **not** modify the ROM.  
-This does **not** inject code.  
+**What this does NOT do:**
+- Modify the ROM
+- Inject code
 
 ---
 
-## How Does It Work?
+## Translation Progress
 
-1. You run Starfy 4 in an emulator.
-2. The tool takes screenshots of your screen at an adjustable millisecond rate.
+World 1: Fully translated
+- All main gameplay text
+- Almost all static UI elements
+- Pause Menu 
+- Stuff Menu 
+- Hints Screen 
+
+Other Worlds: Not yet translated
+
+---
+
+## How It Works
+
+1. You run Starfy 4 in an emulator
+2. The tool takes screenshots of your screen at an adjustable millisecond rate
 3. When certain UI/text regions appear:
-   - A screenshot is taken
+   - A screenshot is captured
    - A perceptual hash is generated
-   - The hash is compared against a known set
-4. If it all aligns:
-   - Translated text is displayed in an overlay
+   - The hash is compared against a known database
+4. If everything aligns:
+   - Translated text displays in an overlay
 5. If anything is even slightly off:
-   - It doesn’t work (see “System Requirements”)
+   - It doesn't work (see "System Requirements" below)
 
 ---
 
-## System Requirements (READ THIS!!!)
+## System Requirements
 
-This project **will not work** unless your setup matches the following *exactly*.  
+⚠️ **READ THIS CAREFULLY** ⚠️
+
+This project will not work unless your setup matches the following **exactly**.
 
 ### Operating System
-- **Windows 11 ONLY**
-  - Not Windows 10
+- **Windows 11 ONLY** (not Windows 10)
 
-### Display
-- **1920×1080 (1080p)**
-- **125% Windows scaling**
-- **60Hz refresh rate**
+### Display Settings
+- **Resolution:** 1920×1080 (1080p)
+- **Windows Scaling:** 125%
+- **Refresh Rate:** 60Hz
 
 ### Emulator
 - **melonDS**
 - **Windowed Fullscreen mode**
 
 ### Game
-- **Starfy 4 ROM**
-  - You must supply this yourself
+- **Starfy 4 ROM** (you must supply this yourself)
 
 ### Media Player
-- **VLC Media Player**
-  - Yes, really, the opening CG is just an overlayed translated video
+- **VLC Media Player** (yes, really—the opening CG is an overlayed translated video)
+
+### Antivirus
+- **Windows Defender may flag this as evasive malware** due to the way the program is coded to hide windows from screenshots. This is a false positive. You may need to whitelist the tool or disable the check to run it.
 
 ---
 
-## Why Are the Requirements So Specific?
+## Why Are the Requirements So Strict?
 
-Because this tool relies on:
+This tool relies on:
 
-- Absolute pixel positions  
-- Predictable scaling behavior  
-- Stable frame timing  
-- The emulator drawing the exact same pixels every time  
+- Absolute pixel positions
+- Predictable scaling behavior
+- Stable frame timing
+- The emulator rendering identical pixels every time
 
 Change anything and:
-- Hashes won’t match
-- Screenshots won’t align
-- Translations won’t trigger
+- Hashes won't match
+- Screenshots won't align
+- Translations won't trigger
 
 ---
 
 ## Known Issues
 
-- Breaks if:
-  - You move the emulator window
-  - You change scaling
-- Does not like:
-  - Multi-monitor setups
-  - Your optimism
+**Breaks if:**
+- You move the emulator window
+- Don't run it in windowed maximized 
+- You change scaling
+- You run any rendering setting besides Software in MelonDS
+
+**Does not like:**
+- Multi-monitor setups
+- Your optimism
 
 ---
 
-## Final Notes
+## Getting Started
 
-If this works on your machine:
-- Congratulations
-
-If it doesn’t:
-- Good luck.
-
-:)
+1. Set up your system according to the requirements above (yes, all of them)
+2. Obtain your Starfy 4 ROM
+3. Run the tool first before opening the ROM in MelonDS
+4. Configure the tool's screenshot capture rate
+5. Load the ROM
+6. Either enjoy translations or debugging
 
 ---
 
-## Credits / Acknowledgements
+## Credits & Acknowledgments
 
-This project would not exist without **SomeUselessTranslation** on YouTube.
+This project would not exist without **SomeUselessTranslations** on YouTube. Their full translation of Starfy 4 was used extensively during development. The opening CG fully belongs to them.
 
-Their full translation of Starfy 4 was used extensively during the creation of this tool.
-The opening CG fully belongs to them.
+---
+
+*If this works on your machine: Congratulations. If it doesn't: Good luck. :)*
