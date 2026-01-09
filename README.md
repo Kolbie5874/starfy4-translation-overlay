@@ -64,7 +64,7 @@ This project will not work unless your setup matches the following **exactly**.
 
 ### Emulator
 - **melonDS**
-- **Windowed Fullscreen mode**
+- **Windowed Fullscreen/Maximized mode**
 
 ### Game
 - **Starfy 4 ROM** (you must supply this yourself)
@@ -99,12 +99,12 @@ Change anything and:
 ## Known Issues
 
 **Not Implemented/Bugs:**
--Title screen is not translated
--Sometimes the opening CG starts late, so try again by re-opening the ROM or just deal with audio not being perfectly synced
+   - Title screen is not translated
+   - Sometimes the opening CG starts late, so try again by re-opening the ROM or just deal with audio not being perfectly synced
 
 **Breaks if:**
 - You move the emulator window
-- Don't run it in windowed maximized 
+- Don't run it in windowed fullscreen/maximized
 - You change scaling
 - You run any rendering setting besides Software in MelonDS
 
