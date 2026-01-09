@@ -1,0 +1,899 @@
+{
+  "regions": [
+    {
+      "crop": [
+        661,
+        367,
+        539,
+        153
+      ],
+      "overlay": [
+        660,
+        367,
+        540,
+        153
+      ],
+      "patches": [
+        [
+          1200,
+          368,
+          66,
+          115
+        ]
+      ],
+      "font_pt": 25,
+      "label": "standard dialogue"
+    },
+    {
+      "crop": [
+        793,
+        365,
+        465,
+        156
+      ],
+      "overlay": [
+        661,
+        367,
+        539,
+        153
+      ],
+      "patches": [
+        {
+          "cut": [
+            722,
+            438,
+            69,
+            83
+          ]
+        }
+      ],
+      "font_pt": 24,
+      "label": "YES/NO prompt"
+    },
+    {
+      "crop": [
+        654,
+        401,
+        604,
+        118
+      ],
+      "overlay": [
+        654,
+        401,
+        604,
+        118
+      ],
+      "overlay_color": "#FBDBA2",
+      "font_pt": 25,
+      "label": "menu bottom"
+    },
+    {
+      "crop": [
+        654,
+        361,
+        610,
+        32
+      ],
+      "overlay": [
+        654,
+        361,
+        610,
+        32
+      ],
+      "overlay_color": "#FB8A00",
+      "font_pt": 22,
+      "label": "menu top"
+    },
+    {
+      "crop": [
+        1098,
+        619,
+        132,
+        23
+      ],
+      "overlay": [
+        1098,
+        619,
+        102,
+        23
+      ],
+      "font_pt": 14,
+      "label": "bottom-screen goal"
+    },
+    {
+      "crop": [
+        1100,
+        701,
+        163,
+        19
+      ],
+      "overlay": [
+        1100,
+        700,
+        163,
+        20
+      ],
+      "font_pt": 12,
+      "label": "bottom-screen city"
+    },
+    {
+      "crop": [
+        1098,
+        778,
+        160,
+        24
+      ],
+      "overlay": [
+        1098,
+        778,
+        160,
+        24
+      ],
+      "font_pt": 14,
+      "label": "bottom-screen warp"
+    },
+    {
+      "crop": [
+        1099,
+        858,
+        162,
+        23
+      ],
+      "overlay": [
+        1099,
+        858,
+        162,
+        23
+      ],
+      "font_pt": 14,
+      "label": "bottom-screen warp king"
+    },
+    {
+      "crop": [
+        1099,
+        937,
+        157,
+        24
+      ],
+      "overlay": [
+        1099,
+        937,
+        157,
+        24
+      ],
+      "font_pt": 14,
+      "label": "bottom-screen warp door"
+    },
+    {
+      "crop": [
+        887,
+        978,
+        89,
+        21
+      ],
+      "overlay": [
+        887,
+        978,
+        89,
+        21
+      ],
+      "font_pt": 15,
+      "label": "bottom-screen pause"
+    },
+    {
+      "crop": [
+        656,
+        374,
+        600,
+        156
+      ],
+      "overlay": [
+        656,
+        374,
+        600,
+        156
+      ],
+      "font_pt": 25,
+      "patches": [
+        {
+          "cut": [
+            694,
+            490,
+            90,
+            37
+          ]
+        },
+        {
+          "cut": [
+            1046,
+            495,
+            44,
+            35
+          ]
+        }
+      ],
+      "label": "abilities dialogue"
+    },
+    {
+      "crop": [
+        656,
+        580,
+        535,
+        155
+      ],
+      "overlay": [
+        656,
+        580,
+        535,
+        155
+      ],
+      "patches": [
+        [
+          1170,
+          577,
+          89,
+          120
+        ]
+      ],
+      "font_pt": 27,
+      "label": "bottom-screen dialogue"
+    },
+    {
+      "crop": [
+        919,
+        148,
+        281,
+        109
+      ],
+      "overlay": [
+        919,
+        148,
+        281,
+        109
+      ],
+      "font_pt": 27,
+      "label": "1-1 warp"
+    },
+    {
+      "crop": [
+        661,
+        561,
+        549,
+        158
+      ],
+      "overlay": [
+        661,
+        561,
+        549,
+        158
+      ],
+      "font_pt": 31,
+      "patches": [
+        {
+          "cut": [
+            977,
+            686,
+            75,
+            31
+          ]
+        }
+      ],
+      "label": "stuff"
+    },
+    {
+      "crop": [
+        689,
+        76,
+        547,
+        48
+      ],
+      "overlay": [
+        689,
+        75,
+        547,
+        48
+      ],
+      "overlay_color": "#FBCB71",
+      "font_pt": 32,
+      "label": "world sign"
+    },
+    {
+      "crop": [
+        739,
+        560,
+        280,
+        76
+      ],
+      "overlay": [
+        683,
+        560,
+        339,
+        78
+      ],
+      "font_pt": 47,
+      "overlay_color": "#8269FB",
+      "label": "stuff menu logo"
+    },
+    {
+      "crop": [
+        680,
+        640,
+        325,
+        37
+      ],
+      "overlay": [
+        680,
+        640,
+        325,
+        37
+      ],
+      "font_pt": 27,
+      "label": "stuff items 1"
+    },
+    {
+      "crop": [
+        1044,
+        677,
+        196,
+        65
+      ],
+      "overlay": [
+        1044,
+        677,
+        199,
+        65
+      ],
+      "font_pt": 14,
+      "label": "stuff items description"
+    },
+    {
+      "crop": [
+        1046,
+        770,
+        194,
+        157
+      ],
+      "overlay": [
+        1046,
+        769,
+        194,
+        159
+      ],
+      "font_pt": 18,
+      "patches": [
+        {
+          "cut": [
+            1027,
+            794,
+            233,
+            18
+          ]
+        },
+        {
+          "cut": [
+            1027,
+            840,
+            233,
+            18
+          ]
+        },
+        {
+          "cut": [
+            1027,
+            886,
+            233,
+            18
+          ]
+        }
+      ],
+      "label": "stuff buttons"
+    },
+    {
+      "crop": [
+        773,
+        959,
+        377,
+        36
+      ],
+      "overlay": [
+        773,
+        959,
+        377,
+        36
+      ],
+      "font_pt": 23,
+      "patches": [
+        {
+          "cut": [
+            868,
+            959,
+            35,
+            39
+          ]
+        },
+        {
+          "cut": [
+            1010,
+            959,
+            35,
+            39
+          ]
+        }
+      ],
+      "label": "stuff buttons bottom"
+    },
+    {
+      "crop": [
+        1100,
+        640,
+        180,
+        25
+      ],
+      "overlay": [
+        1160,
+        640,
+        100,
+        25
+      ],
+      "font_pt": 16,
+      "overlay_color": "#8269FB",
+      "label": "stuff change starfy/starly"
+    },
+    {
+      "crop": [
+        665,
+        479,
+        590,
+        51
+      ],
+      "overlay": [
+        665,
+        480,
+        590,
+        50
+      ],
+      "font_pt": 28,
+      "overlay_color": "#C5B915",
+      "label": "stuff top text"
+    },
+    {
+      "crop": [
+        662,
+        583,
+        550,
+        142
+      ],
+      "overlay": [
+        662,
+        583,
+        550,
+        152
+      ],
+      "patches": [
+        [
+          1209,
+          578,
+          54,
+          128
+        ]
+      ],
+      "font_pt": 25,
+      "label": "moe payphone"
+    },
+    {
+      "crop": [
+        699,
+        228,
+        279,
+        109
+      ],
+      "overlay": [
+        699,
+        228,
+        279,
+        109
+      ],
+      "font_pt": 27,
+      "label": "1-2 warp"
+    },
+    {
+      "crop": [
+        986,
+        196,
+        148,
+        30
+      ],
+      "overlay": [
+        986,
+        196,
+        148,
+        37
+      ],
+      "font_pt": 18,
+      "label": "1-1 warp text"
+    },
+    {
+      "crop": [
+        766,
+        275,
+        148,
+        35
+      ],
+      "overlay": [
+        766,
+        275,
+        148,
+        35
+      ],
+      "font_pt": 18,
+      "label": "1-2 warp text"
+    },
+    {
+      "crop": [
+        640,
+        540,
+        640,
+        480
+      ],
+      "overlay": [
+        766,
+        275,
+        148,
+        35
+      ],
+      "font_pt": 18,
+      "label": "pause menu stuff small"
+    },
+    {
+      "crop": [
+        905,
+        228,
+        274,
+        108
+      ],
+      "overlay": [
+        905,
+        228,
+        274,
+        108
+      ],
+      "font_pt": 27,
+      "label": "warp 1-3"
+    },
+    {
+      "crop": [
+        968,
+        272,
+        148,
+        40
+      ],
+      "overlay": [
+        968,
+        272,
+        148,
+        40
+      ],
+      "font_pt": 18,
+      "label": "warp 1-3 text"
+    },
+    {
+      "crop": [
+        680,
+        684,
+        314,
+        31
+      ],
+      "overlay": [
+        681,
+        680,
+        319,
+        37
+      ],
+      "font_pt": 27,
+      "label": "stuff items 2"
+    },
+    {
+      "crop": [
+        1077,
+        649,
+        148,
+        87
+      ],
+      "overlay": [
+        684,
+        583,
+        120,
+        43
+      ],
+      "font_pt": 27,
+      "overlay_color": "#FB9A28",
+      "label": "pause menu stuff"
+    },
+    {
+      "crop": [
+        1068,
+        624,
+        148,
+        101
+      ],
+      "overlay": [
+        685,
+        648,
+        290,
+        43
+      ],
+      "font_pt": 27,
+      "overlay_color": "#61D308",
+      "label": "pause menu hints and items 1"
+    },
+    {
+      "crop": [
+        1115,
+        624,
+        155,
+        91
+      ],
+      "overlay": [
+        685,
+        707,
+        328,
+        43
+      ],
+      "font_pt": 27,
+      "overlay_color": "#FB6161",
+      "label": "pause menu abilities 1"
+    },
+    {
+      "crop": [
+        1112,
+        666,
+        148,
+        43
+      ],
+      "overlay": [
+        684,
+        773,
+        275,
+        44
+      ],
+      "font_pt": 27,
+      "overlay_color": "#EBE349",
+      "label": "pause menu quit 1"
+    },
+    {
+      "crop": [
+        1042,
+        743,
+        205,
+        59
+      ],
+      "overlay": [
+        1042,
+        743,
+        205,
+        59
+      ],
+      "font_pt": 19,
+      "label": "pause buttons"
+    },
+    {
+      "crop": [
+        655,
+        846,
+        542,
+        119
+      ],
+      "overlay": [
+        655,
+        846,
+        606,
+        119
+      ],
+      "font_pt": 25,
+      "label": "bottom bottom screen dialogue"
+    },
+    {
+      "crop": [
+        813,
+        705,
+        198,
+        70
+      ],
+      "overlay": [
+        813,
+        705,
+        198,
+        70
+      ],
+      "font_pt": 38,
+      "overlay_color": "#EBE349",
+      "label": "pause save screen"
+    },
+    {
+      "crop": [
+        900,
+        846,
+        351,
+        166
+      ],
+      "overlay": [
+        658,
+        847,
+        557,
+        166
+      ],
+      "font_pt": 25,
+      "patches": [
+        {
+          "cut": [
+            722,
+            880,
+            68,
+            80
+          ]
+        }
+      ],
+      "label": "bottom bottom screen dialogue"
+    },
+    {
+      "crop": [
+        875,
+        579,
+        148,
+        21
+      ],
+      "overlay": [
+        875,
+        579,
+        221,
+        21
+      ],
+      "font_pt": 13,
+      "overlay_color": "#E3FBFB",
+      "label": "pause hints and item list"
+    },
+    {
+      "crop": [
+        668,
+        229,
+        268,
+        108
+      ],
+      "overlay": [
+        668,
+        229,
+        268,
+        108
+      ],
+      "font_pt": 27,
+      "label": "1-4 warp"
+    },
+    {
+      "crop": [
+        725,
+        276,
+        148,
+        34
+      ],
+      "overlay": [
+        725,
+        276,
+        148,
+        34
+      ],
+      "font_pt": 18,
+      "label": "warp 1-4 text"
+    },
+    {
+      "crop": [
+        828,
+        190,
+        350,
+        116
+      ],
+      "overlay": [
+        828,
+        190,
+        350,
+        116
+      ],
+      "font_pt": 18,
+      "patches": [
+        [
+          1089,
+          190,
+          140,
+          65
+        ]
+      ],
+      "label": "warp konk talking"
+    },
+    {
+      "crop": [
+        863,
+        267,
+        198,
+        66
+      ],
+      "overlay": [
+        863,
+        267,
+        198,
+        66
+      ],
+      "font_pt": 18,
+      "label": "save game"
+    },
+    {
+      "crop": [
+        863,
+        267,
+        198,
+        31
+      ],
+      "overlay": [
+        863,
+        267,
+        198,
+        31
+      ],
+      "font_pt": 18,
+      "label": "save game text"
+    },
+    {
+      "crop": [
+        853,
+        250,
+        218,
+        90
+      ],
+      "overlay": [
+        853,
+        250,
+        218,
+        90
+      ],
+      "font_pt": 28,
+      "overlay_color": "#FBFBFB",
+      "label": "springoflove"
+    },
+    {
+      "crop": [
+        673,
+        92,
+        571,
+        137
+      ],
+      "overlay": [
+        673,
+        92,
+        571,
+        137
+      ],
+      "font_pt": 25,
+      "label": "toptop screen dialogue"
+    }
+  ],
+  "hash_color_overrides": {
+    "a4ecdcdbd120d319": "#D3FBF3",
+    "ac85d3dfd5609432": "#D3FBF3",
+    "a491c007f7fcd827": "#D3FBF3",
+    "a4d1c507dffc9103": "#D3FBF3",
+    "91decde2f319cc04": "#D3FBF3",
+    "ad02bd2556c7d171": "#FB498A",
+    "ab22d542d7819cee": "#FB9A18",
+    "ad7c8763cc079607": "#FB498A",
+    "a53dc723dc079607": "#FB9A18",
+    "a922d542d781dcee": "#FB9A18",
+    "a4927939c82ddacd": "#7D7D7D",
+    "e6d2d2b4b542f151": "#7D7D7D",
+    "ebe9c0f6970b8415": "#7D7D7D",
+    "eae9c1d69f08ad24": "#7D7D7D",
+    "aea79d9ad007c60b": "#7D7D7D",
+    "df51c1a6a689896e": "#7D7D7D",
+    "aeb15456c8e3de18": "#FB9A28",
+    "af955456c8e3de08": "#61D308",
+    "afb5545688e3de08": "#FB6161",
+    "aef15054c8e3de1c": "#EBE349"
+  }
+}
