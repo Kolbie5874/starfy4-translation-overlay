@@ -98,6 +98,10 @@ Change anything and:
 
 ## Known Issues
 
+**Not Implemented/Bugs:**
+-Title screen is not translated
+-Sometimes the opening CG starts late, so try again by re-opening the ROM or just deal with audio not being perfectly synced
+
 **Breaks if:**
 - You move the emulator window
 - Don't run it in windowed maximized 
