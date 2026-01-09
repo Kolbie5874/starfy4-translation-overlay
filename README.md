@@ -70,7 +70,7 @@ This project will not work unless your setup matches the following **exactly**.
 - **Starfy 4 ROM** (you must supply this yourself)
 
 ### Media Player
-- **VLC Media Player** (yes, really—the opening CG is an overlayed translated video)
+- **VLC Media Player** (yes, really, the opening CG is an overlayed translated video)
 
 ### Antivirus
 - **Windows Defender may flag this as evasive malware** due to the way the program is coded to hide windows from screenshots. This is a false positive. You may need to whitelist the tool or disable the check to run it.
