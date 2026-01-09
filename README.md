@@ -131,4 +131,8 @@ This project would not exist without **SomeUselessTranslations** on YouTube. The
 
 ---
 
-*If this works on your machine: Congratulations. If it doesn't: Good luck. :)*
+If this works on your machine: Congratulations. 
+
+If it doesn't: Good luck. 
+
+:)
