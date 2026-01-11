@@ -33,6 +33,12 @@ I will update this project as I continue my playthrough of Starfy 4, hoping for 
 
 ---
 
+## Demo
+
+https://github.com/user-attachments/assets/ddb82e96-85a1-4232-8ad8-b56cc6f55a50
+
+---
+
 ## How It Works
 
 1. You run Starfy 4 in an emulator
