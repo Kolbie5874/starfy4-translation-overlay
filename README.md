@@ -20,7 +20,7 @@ Think of it more like a puppet show performed in front of an emulator.
 
 ## Translation Progress
 
-World 1: Fully translated
+World 1 and 2: Fully translated
 - All main gameplay text
 - Almost all static UI elements
 - Pause Menu 
