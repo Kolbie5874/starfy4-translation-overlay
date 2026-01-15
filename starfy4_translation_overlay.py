@@ -226,8 +226,8 @@ class PatchWindow(QWidget):
 
 class VideoOverlay(QWidget):
     """Video overlay for playing cutscenes."""
-    
-    def __init__(self, rect, video_path):
+
+    def __init__(self, rect, player):
         super().__init__(
             None,
             Qt.Tool
@@ -241,20 +241,16 @@ class VideoOverlay(QWidget):
         self.setGeometry(*rect)
         self.show()
         hide_from_capture(int(self.winId()))
-        
-        # Initialize VLC player
-        vlc_instance = vlc.Instance("--no-video-title-show", "--quiet")
-        self.player = vlc_instance.media_player_new()
-        media = vlc_instance.media_new(os.path.abspath(video_path))
-        self.player.set_media(media)
-        
+
+        # Use pre-initialized player
+        self.player = player
+
         # Set video output window
         if sys.platform.startswith("win"):
             self.player.set_hwnd(int(self.winId()))
         else:
             self.player.set_xwindow(int(self.winId()))
-        
-        self.player.audio_set_mute(True)
+
         self.player.play()
 
     def closeEvent(self, event):
@@ -368,12 +364,24 @@ class RegionController:
 
 class CGController:
     """Controller for managing cutscene video overlays."""
-    
+
     def __init__(self, config, app):
         self.config = config
         self.app = app
         self.video_window = None
         self.is_running = False
+
+        # Preload VLC player and media at initialization
+        vlc_instance = vlc.Instance("--no-video-title-show", "--quiet")
+        self.player = vlc_instance.media_player_new()
+        media = vlc_instance.media_new(os.path.abspath(config["video_path"]))
+        self.player.set_media(media)
+        self.player.audio_set_mute(True)
+        # Parse media to preload it without playing
+        self.player.play()
+        time.sleep(0.1)  # Brief delay to allow parsing
+        self.player.pause()
+        self.player.stop()
 
     def update(self, screenshot):
         """Update CG state based on screenshot."""
@@ -389,7 +397,7 @@ class CGController:
             crop_rect = self.config["stop_crop"]
         else:
             crop_rect = self.config["trigger_crop"]
-        
+
         # Check for trigger/stop markers
         x, y, w, h = crop_rect
         cropped_image = screenshot.crop((x, y, x + w, y + h))
@@ -403,9 +411,12 @@ class CGController:
 
     def _start_cg(self):
         """Start playing cutscene video."""
+        # Reset player to start position
+        self.player.set_position(0.0)
+        # Create video window with preloaded player
         self.video_window = VideoOverlay(
-            self.config["overlay_rect"], 
-            self.config["video_path"]
+            self.config["overlay_rect"],
+            self.player
         )
         self.is_running = True
         self.app.log("CG started")
