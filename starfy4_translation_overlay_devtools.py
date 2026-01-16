@@ -1,3 +1,8 @@
+"""
+These are the cursed dev tools; things are hardcoded, it's awful. 
+If you wanna figure it out, cool, it is neat when it works.
+"""
+
 import sys
 import os
 import json
@@ -970,3 +975,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
