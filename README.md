@@ -30,6 +30,7 @@ World 1 and 2: Fully translated
 Other Worlds: Not yet translated
 
 I will update this project as I continue my playthrough of Starfy 4, hoping for a near-complete translation in the coming months.
+
 I'm trying my best to stick to weekly releases of worlds.
 
 ---
