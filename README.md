@@ -24,7 +24,7 @@ Worlds 1, 2, and 3: Fully translated
 - All main gameplay text
 - Almost all static UI elements
 - Pause Menu 
-- Stuff Menu 
+- Some of Stuff Menu 
 - Hints Screen 
 
 Other Worlds: Not yet translated
