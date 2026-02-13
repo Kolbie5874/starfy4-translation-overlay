@@ -1,8 +1,3 @@
-"""
-These are the cursed dev tools; things are hardcoded, it's awful. 
-If you wanna figure it out, cool, it is neat when it works.
-"""
-
 import sys
 import os
 import json
@@ -27,9 +22,9 @@ from PyQt5.QtGui import QPainter, QColor, QFont, QFontDatabase, QTextDocument
 # CONFIG
 
 # Database and monitoring settings
-HASH_DB_FILE = "hash_db_v3.json"
+HASH_DB_FILE = "hash_db.json"
 UNSEEN_DIR = "untranslated"
-CHECK_INTERVAL = 1  # milliseconds
+CHECK_INTERVAL = 16  # milliseconds
 UI_RECT = (1300, 80, 320, 600)
 
 # CG configuration
@@ -40,278 +35,13 @@ CG_CFG = {
     "video_path": "cg.mp4",
 }
 
-# Region definitions
-REGION_CFG = [
-    {  # 0 – standard dialogue
-        "crop": (661, 367, 539, 153),
-        "overlay": (660, 367, 540, 153),
-        "patches": [(1200, 368, 66, 115)],
-        "font_pt": 25,
-    },
-    {  # 1 – YES/NO prompt
-        "crop": (793, 365, 465, 156),
-        "overlay": (661, 367, 539, 153),
-        "patches": [{"cut": (722, 438, 69, 83)}],
-        "font_pt": 24,
-    },
-    {  # 2 – menu bottom
-        "crop": (654, 401, 604, 118),
-        "overlay": (654, 401, 604, 118),
-        "overlay_color": "#FBDBA2",
-        "font_pt": 25,
-    },
-    {  # 3 – menu top
-        "crop": (654, 361, 610, 32),
-        "overlay": (654, 361, 610, 32),
-        "overlay_color": "#FB8A00",
-        "font_pt": 22,
-    },
-    {  # 4 - bottom-screen goal
-        "crop": (1098, 619, 132, 23),
-        "overlay": (1098, 619, 102, 23),
-        "font_pt": 14,
-    },
-    {  # 5 - bottom-screen city
-        "crop": (1100, 701, 163, 19),
-        "overlay": (1100, 700, 163, 20),
-        "font_pt": 12,
-    },
-    {  # 6 - bottom-screen warp
-        "crop": (1098, 778, 160, 24),
-        "overlay": (1098, 778, 160, 24),
-        "font_pt": 14,
-    },
-    {  # 7 - bottom-screen warp king
-        "crop": (1099, 858, 162, 23),
-        "overlay": (1099, 858, 162, 23),
-        "font_pt": 14,
-    },
-    {  # 8 - bottom-screen warp door
-        "crop": (1099, 937, 157, 24),
-        "overlay": (1099, 937, 157, 24),
-        "font_pt": 14,
-    },
-    {  # 9 - bottom-screen pause
-        "crop": (887, 978, 89, 21),
-        "overlay": (887, 978, 89, 21),
-        "font_pt": 15,
-    },
-    {  # 10 - abilities dialogue
-        "crop": (656, 374, 600, 156),
-        "overlay": (656, 374, 600, 156),
-        "font_pt": 25,
-        "patches": [
-            {"cut": (694, 490, 90, 37)},
-            {"cut": (1046, 495, 44, 35)},
-        ],
-    },
-    {  # 11 - bottom-screen dialogue
-        "crop": (656, 580, 535, 155),
-        "overlay": (656, 580, 535, 155),
-        "patches": [(1170, 577, 89, 120)],
-        "font_pt": 27,
-    },
-    {  # 12 - stuff
-        "crop": (661, 561, 549, 158),
-        "overlay": (661, 561, 549, 158),
-        "font_pt": 31,
-        "patches": [
-            {"cut": (977, 686, 75, 31)},
-        ],
-    },
-    {  # 13 - world sign
-        "crop": (689, 76, 547, 48),
-        "overlay": (689, 75, 547, 48),
-        "overlay_color": "#FBCB71",
-        "font_pt": 32,
-    },
-    {  # 14 – stuff menu logo
-        "crop":       (739, 560, 280, 76),
-        "overlay":    (683, 560, 339, 78),
-        "font_pt":    47,
-        "overlay_color": "#8269FB",
-    },
-    {  # 15 - stuff items 1
-        "crop": (680,640,325,37),
-        "overlay": (680,640,325,37),
-        "font_pt": 27,
-    },
-    {  # 16 - stuff items description
-        "crop": (1044,677,196,65),
-        "overlay": (1044,677,199,65),
-        "font_pt": 14,
-    },
-    {  # 17 - stuff buttons
-        "crop": (1046,770,194,157),
-        "overlay": (1046,769,194,159),
-        "font_pt": 18,
-        "patches": [
-            {"cut": (1027, 794, 233, 18)},
-            {"cut": (1027, 840, 233, 18)},
-            {"cut": (1027, 886, 233, 18)},
-        ],
-    },
-    {  # 18 - stuff buttons bottom
-        "crop": (773, 959, 377, 36),
-        "overlay": (773, 959, 377, 36),
-        "font_pt": 23,
-        "patches": [
-            {"cut": (868, 959, 35, 39)},
-            {"cut": (1010, 959, 35, 39)},
-        ],
-    },
-    {  # 19 - stuff change starfy/starly
-        "crop": (1100, 640, 180, 25),
-        "overlay": (1160, 640, 100, 25),
-        "font_pt": 16,
-        "overlay_color": "#8269FB",
-    },
-    {  # 20 - stuff top text
-        "crop": (665, 479, 590, 51),
-        "overlay": (665, 480, 590, 50),
-        "font_pt": 28,
-        "overlay_color": "#C5B915",
-    },
-    {  # 21 - moe payphone
-        "crop": (662, 583, 550, 142),
-        "overlay": (662, 583, 550, 152),
-        "patches": [(1209, 578, 54, 128)],
-        "font_pt": 25,
-    },
-    {  # 22 - pause menu stuff small
-        "crop": (640, 540, 640, 480),
-        "overlay": (766, 275, 148, 35),
-        "font_pt": 18,
-    },
-    {  # 23 - stuff items 2
-        "crop": (680, 684, 314, 31),
-        "overlay": (681, 680, 319, 37),
-        "font_pt": 27,
-    },
-    {  # 24 - pause menu stuff
-        "crop": (1077, 649, 148, 87),
-        "overlay": (684, 583, 120, 43),
-        "font_pt": 27,
-        "overlay_color": "#FB9A28",
-    },
-    {  # 25 - pause menu hints and items 1
-        "crop": (1068, 624, 148, 101),
-        "overlay": (685, 648, 290, 43),
-        "font_pt": 27,
-        "overlay_color": "#61D308",
-    },
-    {  # 26 - pause menu abilities 1
-        "crop": (1115, 624, 155, 91),
-        "overlay": (685, 707, 328, 43),
-        "font_pt": 27,
-        "overlay_color": "#FB6161",
-    },
-    {  # 27 - pause menu quit 1
-        "crop": (1112, 666, 148, 43),
-        "overlay": (684, 773, 275, 44),
-        "font_pt": 27,
-        "overlay_color": "#EBE349",
-    },
-    {  # 28 - pause buttons
-        "crop": (1042, 743, 205, 59),
-        "overlay": (1042, 743, 205, 59),
-        "font_pt": 19,
-    },
-    {  # 29- bottom bottom screen dialogue
-        "crop": (655, 846, 542, 119),
-        "overlay": (655, 846, 606, 119),
-        "font_pt": 25,
-    },
-    {  # 30- pause save screen
-        "crop": (813, 705, 198, 70),
-        "overlay": (813, 705, 198, 70),
-        "font_pt": 38,
-        "overlay_color": "#EBE349",
-    },
-    {  # 31- bottom bottom screen dialogue
-        "crop": (900, 846, 351, 166),
-        "overlay": (658, 847, 557, 166),
-        "font_pt": 25,
-        "patches": [
-            {"cut": (722, 880, 68, 80)},
-        ],
-    },
-    {   #32 warp konk talking
-        "crop": (828, 190, 350, 116),
-        "overlay": (828, 190, 350, 116),
-        "font_pt": 18,
-        "patches": [(1089, 190, 140, 65)],
-    },
-    {   #33 save game
-        "crop": (863, 267, 198, 66),
-        "overlay": (863, 267, 198, 66),
-        "font_pt": 18,
-    },
-    {   #34 save game text
-        "crop": (863, 267, 198, 31),
-        "overlay": (863, 267, 198, 31),
-        "font_pt": 18,
-    },
-    {   #35 springoflove
-        "crop": (853, 250, 218, 90),
-        "overlay": (853, 250, 218, 90),
-        "font_pt": 28,
-        "overlay_color": "#FBFBFB",
-    },
-    {   #36 toptop screen dialogue
-        "crop": (673, 92, 571, 137),
-        "overlay": (673, 92, 571, 137),
-        "font_pt": 25,
-    },
-    {  # 37 - stuff items 3
-        "crop": (680, 720, 345, 38),
-        "overlay": (680, 720, 318, 38),
-        "font_pt": 27,
-    },
-    {  # 38 - stuff items 4
-        "crop": (680, 760, 345, 38),
-        "overlay": (680, 760, 321, 38),
-        "font_pt": 27,
-    },
-    {  # 39 - stuff items 5
-        "crop": (680, 800, 345, 37),
-        "overlay": (680, 800, 322, 37),
-        "font_pt": 27,
-    },
-    {  # 40 - stuff items 6
-        "crop": (680, 840, 345, 40),
-        "overlay": (680, 840, 318, 40),
-        "font_pt": 27,
-    },
-    {  # 41 - pinch talking
-        "crop": (838, 173, 334, 119),
-        "overlay": (836, 169, 404, 124),
-        "font_pt": 26,
-        "patches": [
-            {"cut": (1186, 245, 148, 48)},
-        ],
-    },
-]
+# Region definitions & hash color overrides (loaded from external JSON)
+_cfg_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "regions.json")
+with open(_cfg_path, "r", encoding="utf-8") as _f:
+    _external_cfg = json.load(_f)
 
-# Put hash: color pairs here.
-HASH_COLOR_OVERRIDES = {
-     "ad02bd2556c7d171": "#FB498A", #Gear Menu
-     "ab22d542d7819cee": "#FB9A18", #Special Menu
-     "ad7c8763cc079607": "#FB498A", #Starly Switch
-     "a53dc723dc079607": "#FB9A18",
-     "a922d542d781dcee": "#FB9A18", #Starly Switch
-     "a4927939c82ddacd": "#7D7D7D",
-     "e6d2d2b4b542f151": "#7D7D7D",
-     "ebe9c0f6970b8415": "#7D7D7D",
-     "eae9c1d69f08ad24": "#7D7D7D",
-     "aea79d9ad007c60b": "#7D7D7D",
-     "df51c1a6a689896e": "#7D7D7D",
-     "aeb15456c8e3de18": "#FB9A28",
-     "af955456c8e3de08": "#61D308",
-     "afb5545688e3de08": "#FB6161",
-     "aef15054c8e3de1c": "#EBE349",
-     
-}
+REGION_CFG = _external_cfg["regions"]
+HASH_COLOR_OVERRIDES = _external_cfg["hash_color_overrides"]
 
 # Global state
 ACTIVE_REGION = 0
@@ -334,7 +64,8 @@ def load_database():
     """Load the hash database from file."""
     if os.path.exists(HASH_DB_FILE):
         with open(HASH_DB_FILE, encoding="utf-8") as f:
-            return json.load(f)
+            db = json.load(f)
+            return migrate_database(db)
     return {}
 
 
@@ -344,6 +75,27 @@ def save_database(db):
         json.dump(db, f, indent=2, ensure_ascii=False)
 
 
+def migrate_database(db):
+    """Migrate database to use hash type prefixes."""
+    migrated = {}
+    needs_migration = False
+
+    for key, value in db.items():
+        if not key.startswith('phash:') and not key.startswith('sha256:') and not key.startswith('__'):
+            # Old format hash - add phash prefix
+            migrated[f'phash:{key}'] = value
+            needs_migration = True
+        else:
+            # Already migrated or special key
+            migrated[key] = value
+
+    if needs_migration:
+        print(f"Migrated {len(db)} database entries to new format")
+        save_database(migrated)
+
+    return migrated
+
+
 def normalize_image(img):
     return img
 
@@ -351,6 +103,17 @@ def normalize_image(img):
 def get_perceptual_hash(img):
     """Get perceptual hash of an image."""
     return imagehash.phash(normalize_image(img))
+
+
+def get_sha256_hash(img):
+    """Get SHA256 hash of an image."""
+    import hashlib
+    # Convert PIL image to bytes
+    img_bytes = img.tobytes()
+    # Get image mode and size for hash
+    metadata = f"{img.mode}{img.size}".encode()
+    # Hash both image data and metadata
+    return hashlib.sha256(metadata + img_bytes).hexdigest()
 
 
 def create_qcolor(color, default=(255, 255, 255)):
@@ -442,7 +205,7 @@ class PatchWindow(QWidget):
         self.setAttribute(Qt.WA_ShowWithoutActivating)
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
 
-        if isinstance(spec, tuple):
+        if isinstance(spec, (tuple, list)):
             rect = spec
             self.text = ""
             self.font_pt = 12
@@ -603,21 +366,41 @@ class RegionController:
         # Crop screenshot to region
         x, y, w, h = self.config["crop"]
         cropped_image = screenshot.crop((x, y, x + w, y + h))
-        
-        # Exact hash look-up
-        hash_key = str(get_perceptual_hash(cropped_image))
-        translation_text = database.get(hash_key, "").strip()
+
+        # Compute both hashes
+        phash_key = f"phash:{str(get_perceptual_hash(cropped_image))}"
+        sha256_key = f"sha256:{get_sha256_hash(cropped_image)}"
+
+        # Check both hash types simultaneously
+        phash_translation = database.get(phash_key, "").strip()
+        sha256_translation = database.get(sha256_key, "").strip()
+
+        # Prefer SHA256 if both match, otherwise use whichever exists
+        if sha256_translation:
+            translation_text = sha256_translation
+            active_hash_key = sha256_key
+        elif phash_translation:
+            translation_text = phash_translation
+            active_hash_key = phash_key
+        else:
+            translation_text = ""
+            active_hash_key = None
+
+        # Use combined hash for change detection
+        current_hash = f"{phash_key}|{sha256_key}"
 
         if translation_text:
             # Decide the overlay background color
+            # Strip prefix for backward compatibility with HASH_COLOR_OVERRIDES
+            bare_hash = active_hash_key.replace('phash:', '').replace('sha256:', '')
             desired_color = HASH_COLOR_OVERRIDES.get(
-                hash_key, self.config.get("overlay_color", (255, 255, 255))
+                bare_hash, self.config.get("overlay_color", (255, 255, 255))
             )
 
             # Is this a brand-new hash?
-            new_hash = (hash_key != self.last_hash)
+            new_hash = (current_hash != self.last_hash)
 
-            # Re-create overlay if it’s missing OR hash changed OR color changed
+            # Re-create overlay if it's missing OR hash changed OR color changed
             if (
                 not self.overlay
                 or desired_color != getattr(self.overlay, "bg_color", None)
@@ -631,11 +414,11 @@ class RegionController:
 
             # Only log the first time you see a new hash
             if new_hash:
-                self.app.set_current_hash(hash_key, translation_text)
-                self.app.log(f"Detected hash {hash_key}")
+                self.app.set_current_hash(active_hash_key, translation_text)
+                self.app.log(f"Detected hash {active_hash_key}")
 
             # Remember what it's showing
-            self.last_hash = hash_key
+            self.last_hash = current_hash
 
         else:
             # No translation, nuke the overlay
@@ -684,7 +467,13 @@ class CGController:
         self.player.audio_set_mute(True)
         # Parse media to preload it without playing
         self.player.play()
-        time.sleep(0.1)  # Brief delay to allow parsing
+        # Wait until VLC actually starts playing (or timeout after 2 seconds)
+        timeout = 2.0
+        start = time.time()
+        while self.player.get_state() not in (vlc.State.Playing, vlc.State.Paused, vlc.State.Ended):
+            time.sleep(0.01)
+            if time.time() - start > timeout:
+                break
         self.player.pause()
         self.player.stop()
 
@@ -706,7 +495,8 @@ class CGController:
         # Check for trigger/stop markers
         x, y, w, h = crop_rect
         cropped_image = screenshot.crop((x, y, x + w, y + h))
-        hash_key = str(get_perceptual_hash(cropped_image))
+        phash = str(get_perceptual_hash(cropped_image))
+        hash_key = f"phash:{phash}"
         tag = self.app.db.get(hash_key, "").strip()
 
         if not self.is_running and tag == "__START_CG__":
@@ -773,10 +563,11 @@ class ControlPanel(QWidget):
         # Region selector
         self.cmb_region = QComboBox()
         for i, region in enumerate(REGION_CFG):
-            self.cmb_region.addItem(f"{i}: {region['crop']}")
+            self.cmb_region.addItem(f"{i}: {region.get('name', region['crop'])}")
         
         # Buttons
         self.btn_hash = QPushButton("Hash textbox (F8)")
+        self.btn_hash_sha256 = QPushButton("Hash SHA256 (F9)")
         self.btn_preview = QPushButton("Preview current")
         self.btn_save = QPushButton("Save translation")
         self.btn_rect = QPushButton("Measure RECT")
@@ -809,7 +600,8 @@ class ControlPanel(QWidget):
         button_layout.addWidget(self.btn_hash)
         button_layout.addWidget(self.btn_preview)
         layout.addLayout(button_layout)
-        
+
+        layout.addWidget(self.btn_hash_sha256)
         layout.addWidget(self.btn_save)
         layout.addWidget(self.btn_rect)
         
@@ -827,6 +619,7 @@ class ControlPanel(QWidget):
         )
         self.cmb_region.currentIndexChanged.connect(self._change_active_region)
         self.btn_hash.clicked.connect(self.capture_hash)
+        self.btn_hash_sha256.clicked.connect(self.capture_hash_sha256)
         self.btn_preview.clicked.connect(self.preview_current)
         self.btn_save.clicked.connect(self.save_current)
         self.btn_rect.clicked.connect(self.measure_rect)
@@ -843,12 +636,18 @@ class ControlPanel(QWidget):
 
     def _start_hotkey_thread(self):
         """Start background thread for hotkey monitoring."""
-        def hotkey_loop():
+        def hotkey_loop_f8():
             while True:
                 keyboard.wait("f8")
                 QTimer.singleShot(0, self.capture_hash)
-        
-        threading.Thread(target=hotkey_loop, daemon=True).start()
+
+        def hotkey_loop_f9():
+            while True:
+                keyboard.wait("f9")
+                QTimer.singleShot(0, self.capture_hash_sha256)
+
+        threading.Thread(target=hotkey_loop_f8, daemon=True).start()
+        threading.Thread(target=hotkey_loop_f9, daemon=True).start()
 
     # Event handlers
     def log(self, message):
@@ -870,7 +669,7 @@ class ControlPanel(QWidget):
         """Change the active region for hash capture."""
         global ACTIVE_REGION
         ACTIVE_REGION = index
-        self.log(f"Active region set to {index} → {REGION_CFG[index]['crop']}")
+        self.log(f"Active region set to {index} → {REGION_CFG[index].get('name', REGION_CFG[index]['crop'])}")
 
     def _update_tick(self):
         """Main update loop - called by timer."""
@@ -880,18 +679,37 @@ class ControlPanel(QWidget):
             controller.update(screenshot, self.db)
 
     def capture_hash(self):
-        """Capture and hash the current active region."""
+        """Capture and hash the current active region using pHash."""
         x, y, w, h = self._get_active_crop_rect()
         screenshot = pyautogui.screenshot().crop((x, y, x + w, y + h))
-        hash_key = str(get_perceptual_hash(screenshot))
-        
+        phash = str(get_perceptual_hash(screenshot))
+        hash_key = f"phash:{phash}"
+
         if hash_key not in self.db:
             os.makedirs(UNSEEN_DIR, exist_ok=True)
-            screenshot.save(os.path.join(UNSEEN_DIR, f"{hash_key}.png"))
+            screenshot.save(os.path.join(UNSEEN_DIR, f"{phash}.png"))
             self.db[hash_key] = ""
             save_database(self.db)
             self.log(f"NEW hash {hash_key} added")
-        
+
+        self.set_current_hash(hash_key, self.db.get(hash_key, ""))
+
+    def capture_hash_sha256(self):
+        """Capture and hash the current active region using SHA256."""
+        x, y, w, h = self._get_active_crop_rect()
+        screenshot = pyautogui.screenshot().crop((x, y, x + w, y + h))
+        sha256_hash = get_sha256_hash(screenshot)
+        hash_key = f"sha256:{sha256_hash}"
+
+        if hash_key not in self.db:
+            os.makedirs(UNSEEN_DIR, exist_ok=True)
+            screenshot.save(os.path.join(UNSEEN_DIR, f"{sha256_hash}.png"))
+            self.db[hash_key] = ""
+            save_database(self.db)
+            self.log(f"NEW SHA256 hash {hash_key} added")
+        else:
+            self.log(f"SHA256 hash already exists: {hash_key}")
+
         self.set_current_hash(hash_key, self.db.get(hash_key, ""))
 
     def preview_current(self):
@@ -975,4 +793,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
