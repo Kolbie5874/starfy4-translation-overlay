@@ -4,7 +4,7 @@ systemcheck.py
 Checks the system requirements.
 """
 
-
+import winreg
 
 def check_modules() -> dict:
     modules = {}
@@ -19,6 +19,16 @@ def check_modules() -> dict:
 
     return modules
 
+def check_vlc_installed():
+    try:
+        # Open the VLC registry key
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\VideoLAN\VLC") as key:
+            vlc_path = winreg.QueryValueEx(key, "InstallLocation")[0]
+            return f"VLC is installed at: {vlc_path}"
+
+    except FileNotFoundError:
+        return "VLC is not installed."
+
 if __name__ == "__main__":
     # Testing Modules
 
@@ -27,3 +37,7 @@ if __name__ == "__main__":
     print("---")
     for mod in modules:
         print(f"{mod}({modules[mod]})") 
+
+    print(check_vlc_installed())
+
+    
