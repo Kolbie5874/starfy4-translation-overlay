@@ -1,0 +1,6 @@
+pyautogui
+imagehash
+python-vlc
+keyboard
+Pillow
+PyQt5
