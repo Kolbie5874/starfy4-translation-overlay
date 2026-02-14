@@ -46,15 +46,21 @@ def check_modules() -> dict:
 
     return modules
 
-def vlc_installed():
-    try:
-        # Open the VLC registry key
-        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\VideoLAN\VLC") as key:
-            vlc_path = winreg.QueryValueEx(key, "InstallLocation")[0]
-            return True
 
-    except FileNotFoundError:
-        return False
+def vlc_installed() -> bool:
+    try:
+        import vlc
+        # Try to create an instance to confirm installation
+        vlc_instance = vlc.Instance("--no-video-title-show", "--quiet")
+        player = vlc_instance.media_player_new()
+        player.stop()  # Ensure we can stop the player without issues
+        return True  # VLC is installed
+    except ImportError:
+        return False  # VLC is not installed
+    except Exception as e:
+        print(f"{Color.RED}Error: {e}{Color.RESET}")  # print any other errors
+        return False  # VLC is not installed or encountered an error
+
 
 def main():
     # Running Tests
@@ -64,7 +70,7 @@ def main():
     modules = check_modules()
     vlc_status = f"{Color.YELLOW}Unknown{Color.RESET}"
 
-    if OS == "Windows":
+    if OS == "Windows" and modules["vlc"]:
         vlc_status = f"{Color.RED}Installed{Color.RESET}" if vlc_installed() else f"{Color.RED}Not Installed{Color.RESET}"
 
     # Printing Output
@@ -72,20 +78,11 @@ def main():
     OS_Check = f'{Color.GREEN}Valid{Color.RESET}' if OS == "Windows" else f'{Color.RED}Invalid{Color.RESET}'
     print(f"Operating System Check: {OS_Check}")
 
-    print("\n"+"="*30+"\n")
-
+    print("\n"+"="*35)
     print_module_status(modules)
-
-    print("\n"+"="*30+"\n")
+    print("="*35+"\n")
 
     print(f"VLC Status: {vlc_status}")
-
-
-
-
-        
-
-
 
 if __name__ == "__main__":
     main()
