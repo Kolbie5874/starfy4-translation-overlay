@@ -11,29 +11,17 @@ import vlc
 from PIL import Image
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QCheckBox, QPlainTextEdit, QLabel,
-    QVBoxLayout, QHBoxLayout, QLineEdit
+    QVBoxLayout, QHBoxLayout, QSpinBox, QFrame
 )
 from PyQt5.QtCore import Qt, QTimer, QRect
-from PyQt5.QtGui import QPainter, QColor, QFont, QFontDatabase, QTextDocument, QIntValidator
+from PyQt5.QtGui import QPainter, QColor, QFont, QFontDatabase, QTextDocument
 
-
-def app_dir() -> str:
-    # If running as a PyInstaller exe
-    if getattr(sys, "frozen", False):
-        return os.path.dirname(sys.executable)
-    # Normal python run
-    return os.path.abspath(os.path.dirname(__file__))
-
-
-def beside_exe(filename: str) -> str:
-    return os.path.join(app_dir(), filename)
+# CONFIG
 
 # Database and monitoring settings
 HASH_DB_FILE = "hash_db.json"
-UNSEEN_DIR = "untranslated"
-CHECK_INTERVAL = 10  # milliseconds
-UI_RECT = (1300, 80, 320, 600)
-OVERLAY_CONFIG_FILE = "overlay_regions.json"
+CHECK_INTERVAL_DEFAULT = 16  # milliseconds
+UI_RECT = (1300, 80, 300, 400)
 
 # CG configuration
 CG_CFG = {
@@ -43,38 +31,27 @@ CG_CFG = {
     "video_path": "cg.mp4",
 }
 
-# Region definitions are loaded from overlay_regions.json.
-DEFAULT_REGION_CFG = []
+# Region definitions & hash color overrides (loaded from external JSON)
+# We expect regions.json to exist in the same directory
+_cfg_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "regions.json")
+if os.path.exists(_cfg_path):
+    with open(_cfg_path, "r", encoding="utf-8") as _f:
+        _external_cfg = json.load(_f)
+    REGION_CFG = _external_cfg.get("regions", [])
+    HASH_COLOR_OVERRIDES = _external_cfg.get("hash_color_overrides", {})
+else:
+    print("[WARN] regions.json not found. Overlays may not work.")
+    REGION_CFG = []
+    HASH_COLOR_OVERRIDES = {}
 
-# Hash color overrides are loaded from overlay_regions.json.
-DEFAULT_HASH_COLOR_OVERRIDES = {}
-
-def load_overlay_config():
-    config_path = beside_exe(OVERLAY_CONFIG_FILE)
-    if not os.path.exists(config_path):
-        return DEFAULT_REGION_CFG, DEFAULT_HASH_COLOR_OVERRIDES
-
-    try:
-        with open(config_path, encoding="utf-8") as f:
-            data = json.load(f)
-    except (OSError, json.JSONDecodeError) as exc:
-        print(f"[WARN] Failed to load {config_path}: {exc}")
-        return DEFAULT_REGION_CFG, DEFAULT_HASH_COLOR_OVERRIDES
-
-    regions = data.get("regions", DEFAULT_REGION_CFG)
-    overrides = data.get("hash_color_overrides", DEFAULT_HASH_COLOR_OVERRIDES)
-    return regions, overrides
-
-
-REGION_CFG, HASH_COLOR_OVERRIDES = load_overlay_config()
-
+# Global state
 NDS_FAMILY = "Courier New"  # Default font, replaced if NDS.ttf is found
 
 
 # UTILITY
 
 def hide_from_capture(hwnd):
-    """Hide windows from screenshots."""
+    """Hide windows from screenshots (Windows only)."""
     if sys.platform.startswith("win"):
         WDA_EXCLUDEFROMCAPTURE = 0x11
         user32 = ctypes.windll.user32
@@ -91,12 +68,6 @@ def load_database():
     return {}
 
 
-def save_database(db):
-    """Save the hash database to file."""
-    with open(HASH_DB_FILE, "w", encoding="utf-8") as f:
-        json.dump(db, f, indent=2, ensure_ascii=False)
-
-
 def normalize_image(img):
     return img
 
@@ -106,6 +77,14 @@ def get_perceptual_hash(img):
     return imagehash.phash(normalize_image(img))
 
 
+def get_sha256_hash(img):
+    """Get SHA256 hash of an image."""
+    import hashlib
+    img_bytes = img.tobytes()
+    metadata = f"{img.mode}{img.size}".encode()
+    return hashlib.sha256(metadata + img_bytes).hexdigest()
+
+
 def create_qcolor(color, default=(255, 255, 255)):
     """Create QColor from various input formats."""
     if color is None:
@@ -113,7 +92,7 @@ def create_qcolor(color, default=(255, 255, 255)):
     return QColor(color) if isinstance(color, str) else QColor(*color)
 
 
-# OVERLAY
+# OVERLAY CLASSES
 
 class OverlayWindow(QWidget):
     """Overlay window for displaying translations."""
@@ -195,7 +174,7 @@ class PatchWindow(QWidget):
         self.setAttribute(Qt.WA_ShowWithoutActivating)
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
 
-        if isinstance(spec, (list, tuple)):
+        if isinstance(spec, (tuple, list)):
             rect = spec
             self.text = ""
             self.font_pt = 12
@@ -299,21 +278,40 @@ class RegionController:
         # Crop screenshot to region
         x, y, w, h = self.config["crop"]
         cropped_image = screenshot.crop((x, y, x + w, y + h))
-        
-        # Exact hash look-up
-        hash_key = str(get_perceptual_hash(cropped_image))
-        translation_text = database.get(hash_key, "").strip()
+
+        # Compute hashes
+        phash_key = f"phash:{str(get_perceptual_hash(cropped_image))}"
+        sha256_key = f"sha256:{get_sha256_hash(cropped_image)}"
+
+        # Check database
+        phash_translation = database.get(phash_key, "").strip()
+        sha256_translation = database.get(sha256_key, "").strip()
+
+        # Prefer SHA256
+        if sha256_translation:
+            translation_text = sha256_translation
+            active_hash_key = sha256_key
+        elif phash_translation:
+            translation_text = phash_translation
+            active_hash_key = phash_key
+        else:
+            translation_text = ""
+            active_hash_key = None
+
+        # Use combined hash for change detection
+        current_hash = f"{phash_key}|{sha256_key}"
 
         if translation_text:
             # Decide the overlay background color
+            bare_hash = active_hash_key.replace('phash:', '').replace('sha256:', '')
             desired_color = HASH_COLOR_OVERRIDES.get(
-                hash_key, self.config.get("overlay_color", (255, 255, 255))
+                bare_hash, self.config.get("overlay_color", (255, 255, 255))
             )
 
             # Is this a brand-new hash?
-            new_hash = (hash_key != self.last_hash)
+            new_hash = (current_hash != self.last_hash)
 
-            # Re-create overlay if it’s missing OR hash changed OR color changed
+            # Re-create overlay if it's missing OR color changed
             if (
                 not self.overlay
                 or desired_color != getattr(self.overlay, "bg_color", None)
@@ -321,36 +319,29 @@ class RegionController:
                 self.destroy()
                 self._create_overlay(desired_color)
 
-            # Make sure the text is up to date
+            # Update text
             if new_hash or self.overlay.text != translation_text:
                 self.overlay.set_text(translation_text)
 
-            # Only log the first time you see a new hash
+            # Log if it's a new encounter in this session
             if new_hash:
-                self.app.log(f"Detected hash {hash_key}")
+                self.app.log(f"Matched: {active_hash_key[:15]}...")
 
-            # Remember what it's showing
-            self.last_hash = hash_key
-
+            self.last_hash = current_hash
         else:
-            # No translation, nuke the overlay
             self.destroy()
-
-
 
     def _create_overlay(self, bg_color):
         """Create the overlay window and patches."""
         holes = []
         block_patches = []
         
-        # Separate holes from block patches
         for spec in self.config.get("patches", []):
             if isinstance(spec, dict) and ("cut" in spec or "hole" in spec):
                 holes.append(spec.get("cut") or spec.get("hole"))
             else:
                 block_patches.append(spec)
         
-        # Create main overlay
         self.overlay = OverlayWindow(
             self.config["overlay"],
             holes=holes,
@@ -358,7 +349,6 @@ class RegionController:
             font_pt=self.config.get("font_pt", 13),
         )
        
-        # Create patch windows
         self.patches = [PatchWindow(spec) for spec in block_patches]
 
 
@@ -371,17 +361,24 @@ class CGController:
         self.video_window = None
         self.is_running = False
 
-        # Preload VLC player and media at initialization
-        vlc_instance = vlc.Instance("--no-video-title-show", "--quiet")
-        self.player = vlc_instance.media_player_new()
-        media = vlc_instance.media_new(os.path.abspath(config["video_path"]))
-        self.player.set_media(media)
-        self.player.audio_set_mute(True)
-        # Parse media to preload it without playing
-        self.player.play()
-        time.sleep(0.1)  # Brief delay to allow parsing
-        self.player.pause()
-        self.player.stop()
+        # Preload VLC
+        try:
+            vlc_instance = vlc.Instance("--no-video-title-show", "--quiet")
+            self.player = vlc_instance.media_player_new()
+            media_path = os.path.abspath(config["video_path"])
+            if os.path.exists(media_path):
+                media = vlc_instance.media_new(media_path)
+                self.player.set_media(media)
+                self.player.audio_set_mute(True)
+                # Prime the player
+                self.player.play()
+                time.sleep(0.1)
+                self.player.pause()
+                self.player.stop()
+            else:
+                self.app.log(f"[WARN] CG file not found: {media_path}")
+        except Exception as e:
+            self.app.log(f"[ERR] VLC Init failed: {e}")
 
     def update(self, screenshot):
         """Update CG state based on screenshot."""
@@ -392,16 +389,15 @@ class CGController:
             self.is_running = False
             return
 
-        # Choose crop region based on current state
         if self.is_running:
             crop_rect = self.config["stop_crop"]
         else:
             crop_rect = self.config["trigger_crop"]
-
-        # Check for trigger/stop markers
+        
         x, y, w, h = crop_rect
         cropped_image = screenshot.crop((x, y, x + w, y + h))
-        hash_key = str(get_perceptual_hash(cropped_image))
+        phash = str(get_perceptual_hash(cropped_image))
+        hash_key = f"phash:{phash}"
         tag = self.app.db.get(hash_key, "").strip()
 
         if not self.is_running and tag == "__START_CG__":
@@ -410,10 +406,7 @@ class CGController:
             self._stop_cg()
 
     def _start_cg(self):
-        """Start playing cutscene video."""
-        # Reset player to start position
         self.player.set_position(0.0)
-        # Create video window with preloaded player
         self.video_window = VideoOverlay(
             self.config["overlay_rect"],
             self.player
@@ -422,28 +415,27 @@ class CGController:
         self.app.log("CG started")
 
     def _stop_cg(self):
-        """Stop playing cutscene video."""
         if self.video_window:
             self.video_window.close()
         self.is_running = False
         self.app.log("CG stopped")
 
 
-# MAIN CONTROL PANEL
+# MAIN VIEWER PANEL
 
-class ControlPanel(QWidget):
-    """Main control panel for the translation overlay system."""
+class ViewerPanel(QWidget):
+    """Simplified Viewer UI for the translation overlay."""
     
     def __init__(self):
         super().__init__(None, Qt.WindowStaysOnTopHint)
         self.setGeometry(*UI_RECT)
-        self.setWindowTitle("Starfy TL Console")
+        self.setWindowTitle("Starfy TL Viewer")
 
         # Application state
         self.translation_enabled = True
         self.cg_enabled = True
         self.db = load_database()
-
+        
         # Initialize UI
         self._create_widgets()
         self._setup_layout()
@@ -452,99 +444,92 @@ class ControlPanel(QWidget):
         
         self.show()
         hide_from_capture(int(self.winId()))
-        self.log(f"UI ready - polling every {self.update_timer.interval()} ms")
+        self.log(f"Viewer Ready. Database entries: {len(self.db)}")
 
     def _create_widgets(self):
-        """Create all UI widgets."""
         # Checkboxes
         self.chk_translation = QCheckBox("Enable translation", checked=True)
         self.chk_cg = QCheckBox("Play opening CG", checked=True)
         
-        # Polling interval input
-        self.edit_interval = QLineEdit(str(CHECK_INTERVAL))
-        self.edit_interval.setValidator(QIntValidator(1, 60000, self))
-        self.edit_interval.setMaximumWidth(120)
+        # Interval Control
+        self.spin_interval = QSpinBox()
+        self.spin_interval.setRange(10, 2000)
+        self.spin_interval.setSingleStep(10)
+        self.spin_interval.setValue(CHECK_INTERVAL_DEFAULT)
+        self.spin_interval.setSuffix(" ms")
 
-        # Log area
+        # Log
         self.log_display = QPlainTextEdit(readOnly=True)
-        self.log_display.setMaximumBlockCount(200)
+        self.log_display.setMaximumBlockCount(100)
 
     def _setup_layout(self):
-        """Set up the widget layout."""
         layout = QVBoxLayout(self)
-        layout.setSpacing(4)
+        layout.setSpacing(6)
         
-        # Checkboxes
-        layout.addWidget(self.chk_translation)
-        layout.addWidget(self.chk_cg)
+        # Settings Block
+        settings_group = QFrame()
+        settings_group.setFrameStyle(QFrame.StyledPanel | QFrame.Raised)
+        g_layout = QVBoxLayout(settings_group)
+        g_layout.addWidget(self.chk_translation)
+        g_layout.addWidget(self.chk_cg)
         
-        # Polling interval
-        interval_layout = QHBoxLayout()
-        interval_layout.addWidget(QLabel("Screenshot interval (ms):"))
-        interval_layout.addWidget(self.edit_interval)
-        interval_layout.addStretch(1)
-        layout.addLayout(interval_layout)
+        # Interval Row
+        row_interval = QHBoxLayout()
+        row_interval.addWidget(QLabel("Scan Speed:"))
+        row_interval.addWidget(self.spin_interval)
+        g_layout.addLayout(row_interval)
         
-        # Log display
+        layout.addWidget(settings_group)
+        
+        # Log
         layout.addWidget(QLabel("Log:"))
         layout.addWidget(self.log_display)
 
     def _connect_signals(self):
-        """Connect widget signals to handlers."""
         self.chk_translation.stateChanged.connect(
             lambda state: setattr(self, "translation_enabled", bool(state))
         )
         self.chk_cg.stateChanged.connect(
             lambda state: setattr(self, "cg_enabled", bool(state))
         )
-        self.edit_interval.editingFinished.connect(self._apply_interval)
+        self.spin_interval.valueChanged.connect(self._update_interval)
 
     def _initialize_controllers(self):
-        """Initialize region and CG controllers."""
         self.region_controllers = [RegionController(config, self) for config in REGION_CFG]
         self.cg_controller = CGController(CG_CFG, self)
         
-        # Start main update timer
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self._update_tick)
-        self.update_timer.start(CHECK_INTERVAL)
+        self.update_timer.start(CHECK_INTERVAL_DEFAULT)
 
-    # Event handlers
     def log(self, message):
         """Add message to log display."""
         timestamp = time.strftime("%H:%M:%S")
         self.log_display.appendPlainText(f"[{timestamp}] {message}")
-        print(message)
 
-    def _apply_interval(self):
-        """Apply the polling interval from the UI."""
-        if not hasattr(self, "update_timer"):
-            return
-        text = self.edit_interval.text().strip()
-        if not text:
-            return
-        try:
-            interval = int(text)
-        except ValueError:
-            return
-        if interval < 1:
-            interval = 1
-            self.edit_interval.setText(str(interval))
-        self.update_timer.setInterval(interval)
-        self.log(f"Polling interval set to {interval} ms")
+    def _update_interval(self, value):
+        """Update timer interval."""
+        self.update_timer.setInterval(value)
 
     def _update_tick(self):
-        """Main update loop - called by timer."""
+        """Main update loop."""
         screenshot = pyautogui.screenshot()
         self.cg_controller.update(screenshot)
         for controller in self.region_controllers:
             controller.update(screenshot, self.db)
 
-# MAIN ENTRY POINT
 
+# ENTRY POINT
+
+def app_dir() -> str:
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(sys.executable)
+    return os.path.abspath(os.path.dirname(__file__))
+
+def beside_exe(filename: str) -> str:
+    return os.path.join(app_dir(), filename)
 
 def main():
-    """Main entry point for the application."""
     global NDS_FAMILY
 
     font_path = beside_exe("NDS.ttf")
@@ -554,17 +539,12 @@ def main():
         print(f"[WARN] NDS.ttf not found at: {font_path}")
     else:
         font_id = QFontDatabase.addApplicationFont(font_path)
-        if font_id == -1:
-            print(f"[WARN] Failed to load font file: {font_path}")
-        else:
+        if font_id != -1:
             fams = QFontDatabase.applicationFontFamilies(font_id)
             if fams:
                 NDS_FAMILY = fams[0]
 
-    print(f"[INFO] DS font family → {NDS_FAMILY}")
-
-    # Create and run control panel
-    control_panel = ControlPanel()
+    viewer = ViewerPanel()
     sys.exit(app.exec_())
 
 
