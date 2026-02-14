@@ -4,7 +4,12 @@ systemcheck.py
 Checks the system requirements.
 """
 
-import winreg
+try:
+    import winreg
+except ImportError:
+    print("Fatal! Module: winreg not found! (are you on windows?)")
+    print("Exiting Safely!")
+    exit()
 
 def check_modules() -> dict:
     modules = {}
