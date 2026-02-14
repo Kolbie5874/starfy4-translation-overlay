@@ -4,12 +4,34 @@ systemcheck.py
 Checks the system requirements.
 """
 
+# Checking if on Windows
+
+OS = None
+
 try:
     import winreg
+    OS = "Windows"
 except ImportError:
-    print("Fatal! Module: winreg not found! (are you on windows?)")
-    print("Exiting Safely!")
-    exit()
+    OS = None
+    
+# Things to make the CLI pretty
+
+class Color:
+    RED = "\033[31m"
+    GREEN = "\033[32m"
+    YELLOW = "\033[33m"
+    RESET = "\033[0m"
+
+def print_module_status(modules: dict):
+    print(f"{Color.GREEN}Module Name{Color.RESET:>20}{Color.GREEN} | Status{Color.RESET:>10}")
+    print("=" * 35)
+    
+    for module, status in modules.items():
+        status_text = "Installed" if status else "Missing"
+        color = Color.GREEN if status else Color.RED
+        print(f"{color}{module:<20}{Color.RESET} | {color}{status_text:>10}{Color.RESET}")
+
+# Function
 
 def check_modules() -> dict:
     modules = {}
@@ -24,25 +46,48 @@ def check_modules() -> dict:
 
     return modules
 
-def check_vlc_installed():
+def vlc_installed():
     try:
         # Open the VLC registry key
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\VideoLAN\VLC") as key:
             vlc_path = winreg.QueryValueEx(key, "InstallLocation")[0]
-            return f"VLC is installed at: {vlc_path}"
+            return True
 
     except FileNotFoundError:
-        return "VLC is not installed."
+        return False
 
-if __name__ == "__main__":
-    # Testing Modules
+def main():
+    # Running Tests
+
+    print("Running Tests")
 
     modules = check_modules()
-    print("Module(Found)")
-    print("---")
-    for mod in modules:
-        print(f"{mod}({modules[mod]})") 
+    vlc_status = f"{Color.YELLOW}Unknown{Color.RESET}"
 
-    print(check_vlc_installed())
+    if OS == "Windows":
+        vlc_status = f"{Color.RED}Installed{Color.RESET}" if vlc_installed() else f"{Color.RED}Not Installed{Color.RESET}"
+
+    # Printing Output
+
+    OS_Check = f'{Color.GREEN}Valid{Color.RESET}' if OS == "Windows" else f'{Color.RED}Invalid{Color.RESET}'
+    print(f"Operating System Check: {OS_Check}")
+
+    print("\n"+"="*30+"\n")
+
+    print_module_status(modules)
+
+    print("\n"+"="*30+"\n")
+
+    print(f"VLC Status: {vlc_status}")
+
+
+
+
+        
+
+
+
+if __name__ == "__main__":
+    main()
 
     
