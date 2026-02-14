@@ -8,7 +8,6 @@ This project is a translation overlay tool for Starfy 4 that works by:
 - Hashing very specific regions of those screenshots
 - Matching them against a database of known text images
 - Overlaying translated text on top of the game
-- Pretending this is a normal and sustainable approach
 
 Think of it more like a puppet show performed in front of an emulator.
 
@@ -116,7 +115,7 @@ Change anything and:
 
 **Does not like:**
 - Multi-monitor setups
-- Your optimism
+- Running above 60Hz
 
 ---
 
