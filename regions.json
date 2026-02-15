@@ -17,7 +17,7 @@
         {
             "name": "menu bottom",
             "crop": [654, 401, 604, 118],
-            "overlay": [654, 401, 604, 118],
+            "overlay": [654, 401, 606, 118],
             "overlay_color": "#FBDBA2",
             "font_pt": 25
         },
@@ -290,6 +290,22 @@
             "overlay": [726, 102, 350, 118],
             "font_pt": 22,
             "patches": [[984, 102, 148, 73]]
+        },
+        {
+            "name": "fugush talking",
+            "crop": [733, 101, 342, 122],
+            "overlay": [733, 101, 403, 122],
+            "font_pt": 24,
+            "patches": [
+                {"cut": [990, 182, 148, 41]}
+            ]
+        },
+        {
+            "name": "dejeel cutscene",
+            "crop": [742, 228, 427, 98],
+            "overlay": [680, 228, 561, 126],
+            "font_pt": 24,
+            "overlay_color": "#4f4f4f"
         }
     ],
     "hash_color_overrides": {
