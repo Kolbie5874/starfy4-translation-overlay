@@ -22,9 +22,9 @@ from PyQt5.QtGui import QPainter, QColor, QFont, QFontDatabase, QTextDocument
 # CONFIG
 
 # Database and monitoring settings
-HASH_DB_FILE = os.path.join("database/", "hash_db.json")
-REGIONS_FILE = os.path.join("database/", "regions.json")
-FONT_FILE = os.path.join("assets/", "NDS.ttf")
+HASH_DB_FILE = "hash_db.json"
+REGIONS_FILE = "regions.json"
+FONT_FILE = "NDS.ttf"
 
 CHECK_INTERVAL_DEFAULT = 16  # milliseconds
 UI_RECT = (1300, 80, 300, 400)
