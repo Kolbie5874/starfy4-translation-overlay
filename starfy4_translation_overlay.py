@@ -19,7 +19,10 @@ from PyQt5.QtGui import QPainter, QColor, QFont, QFontDatabase, QTextDocument
 # CONFIG
 
 # Database and monitoring settings
-HASH_DB_FILE = "hash_db.json"
+HASH_DB_FILE = os.path.join("database/", "hash_db.json")
+REGIONS_FILE = os.path.join("database/", "regions.json")
+FONT_FILE = os.path.join("assets/", "NDS.ttf")
+
 CHECK_INTERVAL_DEFAULT = 16  # milliseconds
 UI_RECT = (1300, 80, 300, 400)
 
@@ -33,7 +36,7 @@ CG_CFG = {
 
 # Region definitions & hash color overrides (loaded from external JSON)
 # We expect regions.json to exist in the same directory
-_cfg_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "regions.json")
+_cfg_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), REGIONS_FILE)
 if os.path.exists(_cfg_path):
     with open(_cfg_path, "r", encoding="utf-8") as _f:
         _external_cfg = json.load(_f)
@@ -532,7 +535,7 @@ def beside_exe(filename: str) -> str:
 def main():
     global NDS_FAMILY
 
-    font_path = beside_exe("NDS.ttf")
+    font_path = beside_exe(FONT_FILE)
     app = QApplication(sys.argv)
 
     if not os.path.exists(font_path):
