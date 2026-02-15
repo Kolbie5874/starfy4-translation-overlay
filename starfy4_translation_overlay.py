@@ -5,6 +5,9 @@ import ctypes
 import time
 from ctypes import wintypes
 
+import utils
+utils.call_systemcheck_gui()
+
 import pyautogui
 import imagehash
 import vlc
