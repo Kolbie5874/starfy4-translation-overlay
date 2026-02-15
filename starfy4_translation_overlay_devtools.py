@@ -24,6 +24,7 @@ from PyQt5.QtGui import QPainter, QColor, QFont, QFontDatabase, QTextDocument
 # Database and monitoring settings
 HASH_DB_FILE = os.path.join("database/", "hash_db.json")
 REGIONS_FILE = os.path.join("database/", "regions.json")
+FONT_FILE = os.path.join("assets/", "NDS.ttf")
 UNSEEN_DIR = "untranslated"
 
 CHECK_INTERVAL = 16  # milliseconds
@@ -772,7 +773,7 @@ def main():
     """Main entry point for the application."""
     global NDS_FAMILY
 
-    font_path = beside_exe("NDS.ttf")
+    font_path = beside_exe(FONT_FILE)
     app = QApplication(sys.argv)
 
     if not os.path.exists(font_path):
