@@ -99,13 +99,9 @@ def migrate_database(db):
     return migrated
 
 
-def normalize_image(img):
-    return img
-
-
 def get_perceptual_hash(img):
     """Get perceptual hash of an image."""
-    return imagehash.phash(normalize_image(img))
+    return imagehash.phash(img)
 
 
 def get_sha256_hash(img):
