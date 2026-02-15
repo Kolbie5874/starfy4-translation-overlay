@@ -62,20 +62,23 @@ def vlc_installed() -> bool:
         return False  # VLC is not installed or encountered an error
 
 
-def main():
+def run() -> list:
     # Running Tests
 
-    print("Running Tests")
+    print("Running Tests\n")
 
     modules = check_modules()
     vlc_status = f"{Color.YELLOW}Unknown{Color.RESET}"
 
+    vlc_okay = False
     if OS == "Windows" and modules["vlc"]:
-        vlc_status = f"{Color.RED}Installed{Color.RESET}" if vlc_installed() else f"{Color.RED}Not Installed{Color.RESET}"
+        vlc_okay = vlc_installed()
+        vlc_status = f"{Color.RED}Installed{Color.RESET}" if vlc_okay else f"{Color.RED}Not Installed{Color.RESET}"
 
     # Printing Output
 
-    OS_Check = f'{Color.GREEN}Valid{Color.RESET}' if OS == "Windows" else f'{Color.RED}Invalid{Color.RESET}'
+    OS_okay = OS == "Windows"
+    OS_Check = f'{Color.GREEN}Valid{Color.RESET}' if OS_okay else f'{Color.RED}Invalid{Color.RESET}'
     print(f"Operating System Check: {OS_Check}")
 
     print("\n"+"="*35)
@@ -84,7 +87,24 @@ def main():
 
     print(f"VLC Status: {vlc_status}")
 
+    # Consolidating Output
+
+    errors = []
+
+    if not OS_okay:
+        errors.append("[FATAL] Operating System invalid")
+
+    for module, status in modules.items():
+        if not status:
+            errors.append(f"[FATAL] Vital module \'{module}\' not found")
+
+    if not vlc_okay:
+        errors.append("[CRITICAL] VLC (64-bit) not installed")
+
+    return errors
+    
+
 if __name__ == "__main__":
-    main()
+    run()
 
     

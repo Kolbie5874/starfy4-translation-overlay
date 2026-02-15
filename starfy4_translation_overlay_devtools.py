@@ -7,6 +7,9 @@ import threading
 from ctypes import wintypes
 import hashlib
 
+import utils
+utils.call_systemcheck_gui()
+
 import pyautogui
 import imagehash
 import vlc
