@@ -5,6 +5,7 @@ import ctypes
 import time
 import threading
 from ctypes import wintypes
+import hashlib
 
 import pyautogui
 import imagehash
@@ -106,7 +107,6 @@ def get_perceptual_hash(img):
 
 def get_sha256_hash(img):
     """Get SHA256 hash of an image."""
-    import hashlib
     # Convert PIL image to bytes
     img_bytes = img.tobytes()
     # Get image mode and size for hash
