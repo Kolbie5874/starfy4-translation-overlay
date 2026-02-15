@@ -22,8 +22,10 @@ from PyQt5.QtGui import QPainter, QColor, QFont, QFontDatabase, QTextDocument
 # CONFIG
 
 # Database and monitoring settings
-HASH_DB_FILE = "hash_db.json"
+HASH_DB_FILE = os.path.join("database/", "hash_db.json")
+REGIONS_FILE = os.path.join("database/", "regions.json")
 UNSEEN_DIR = "untranslated"
+
 CHECK_INTERVAL = 16  # milliseconds
 UI_RECT = (1300, 80, 320, 600)
 
@@ -36,7 +38,7 @@ CG_CFG = {
 }
 
 # Region definitions & hash color overrides (loaded from external JSON)
-_cfg_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "regions.json")
+_cfg_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), REGIONS_FILE)
 with open(_cfg_path, "r", encoding="utf-8") as _f:
     _external_cfg = json.load(_f)
 
