@@ -35,7 +35,7 @@ def print_module_status(modules: dict):
 
 def check_modules() -> dict:
     modules = {}
-    module_list = ["pyautogui", "imagehash", "vlc", "keyboard", "PIL", "PyQt5"]
+    module_list = ["pyautogui", "imagehash", "vlc", "PIL", "PyQt5"]
 
     for module in module_list:
         try:
